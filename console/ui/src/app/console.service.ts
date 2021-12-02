@@ -252,6 +252,24 @@ export class ConsoleService {
     return this.httpClient.get<ApiEndpointList>(this.config.host + urlPath, { params: params, headers: this.getTokenAuthHeaders(auth_token) })
   }
 
+  public listChannelMessages(auth_token: string, label: string, group_id: string, user_ids: ListChannelMessagesRequestUserIDs, cursor: string): Observable<ApiChannelMessageList> {
+    const urlPath = `/v2/console/channel`;
+    let params = new HttpParams();
+    if (label) {
+      params = params.set('label', label);
+    }
+    if (group_id) {
+      params = params.set('group_id', group_id);
+    }
+    if (user_ids) {
+      params = params.set('user_ids', String(user_ids));
+    }
+    if (cursor) {
+      params = params.set('cursor', cursor);
+    }
+    return this.httpClient.get<ApiChannelMessageList>(this.config.host + urlPath, { params: params, headers: this.getTokenAuthHeaders(auth_token) })
+  }
+
   public listGroups(auth_token: string, filter: string, cursor: string): Observable<GroupList> {
     const urlPath = `/v2/console/group`;
     let params = new HttpParams();
@@ -484,6 +502,13 @@ export interface ApiChannelMessage {
   group_id?: string
   user_id_one?: string
   user_id_two?: string
+}
+
+export interface ApiChannelMessageList {
+  messages?: ApiChannelMessage[]
+  next_cursor?: string
+  prev_cursor?: string
+  cacheable_cursor?: string
 }
 
 export interface ApiFriend {
@@ -830,6 +855,18 @@ export interface ListAccountsRequest {
   filter?: string
   tombstones?: boolean
   cursor?: string
+}
+
+export interface ListChannelMessagesRequest {
+  label?: string
+  group_id?: string
+  user_ids?: ListChannelMessagesRequestUserIDs
+  cursor?: string
+}
+
+export interface ListChannelMessagesRequestUserIDs {
+  user_id_one?: string
+  user_id_two?: string
 }
 
 export interface ListGroupsRequest {
