@@ -75,6 +75,12 @@ export class ConsoleService {
     return this.httpClient.delete(this.config.host + urlPath, { params: params, headers: this.getTokenAuthHeaders(auth_token) })
   }
 
+  public deleteChannelMessage(auth_token: string, id: string): Observable<any> {
+    const urlPath = `/v2/console/message/${id}`;
+    let params = new HttpParams();
+    return this.httpClient.delete(this.config.host + urlPath, { params: params, headers: this.getTokenAuthHeaders(auth_token) })
+  }
+
   public deleteFriend(auth_token: string, id: string, friend_id: string): Observable<any> {
     const urlPath = `/v2/console/account/${id}/friend/${friend_id}`;
     let params = new HttpParams();
@@ -772,6 +778,10 @@ export interface ConfigWarning {
 
 export interface ConsoleSession {
   token?: string
+}
+
+export interface DeleteChannelMessageRequest {
+  id?: string
 }
 
 export interface DeleteFriendRequest {
